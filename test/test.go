@@ -15,7 +15,7 @@ func test1() {
 
 func test2() {
 	fmt.Println(go_stack.Stack.GetStack(go_stack.Option{
-		Skip: 2,
+		Skip: 0,
 		FilenameMustInclude: "Work",
 	}))
 }
