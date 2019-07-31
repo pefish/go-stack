@@ -19,11 +19,13 @@ func (this *StackClass) GetStack(skip int) string {
 	if skip > cnt {
 		return "get stack: skip too big"
 	}
+	skipCounter := 0
 	for i := 0; i < cnt; i++ {
 		fu := runtime.FuncForPC(pc[i])
 		name := fu.Name()
 		if !strings.Contains(name, "runtime") && !strings.Contains(name, "go-stack") {
-			if skip - i > 0 {
+			if skipCounter < skip {
+				skipCounter++
 				continue
 			}
 			file, line := fu.FileLine(pc[i] - 1)

@@ -14,7 +14,7 @@ func test1() {
 }
 
 func test2() {
-	fmt.Println(go_stack.Stack.GetStack(1))
+	fmt.Println(go_stack.Stack.GetStack(2))
 }
 
 func main() {
