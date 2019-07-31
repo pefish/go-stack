@@ -12,24 +12,37 @@ type StackClass struct {
 
 var Stack = StackClass{}
 
-func (this *StackClass) GetStack(skip int) string {
+type Option struct {
+	Skip        int
+	FilenameMustInclude string
+	FilenameMustExclude string
+}
+
+func (this *StackClass) GetStack(opts Option) string {
 	result := ``
 	pc := make([]uintptr, 64)
 	cnt := runtime.Callers(0, pc)
+	skip := opts.Skip
 	if skip > cnt {
-		return "get stack: skip too big"
+		return "get stack: Skip too big"
 	}
 	skipCounter := 0
 	for i := 0; i < cnt; i++ {
 		fu := runtime.FuncForPC(pc[i])
 		name := fu.Name()
 		if !strings.Contains(name, "runtime") && !strings.Contains(name, "go-stack") {
+			file, line := fu.FileLine(pc[i] - 1)
+			if opts.FilenameMustExclude != `` && strings.Contains(file, opts.FilenameMustExclude) {
+				continue
+			}
+			if opts.FilenameMustInclude != `` && !strings.Contains(file, opts.FilenameMustInclude) {
+				continue
+			}
 			if skipCounter < skip {
 				skipCounter++
 				continue
 			}
-			file, line := fu.FileLine(pc[i] - 1)
-			result += file + ` --- ` + strconv.FormatInt(int64(line), 10) + "\n"
+			result += file + ` --- ` + name + ` --- ` + strconv.FormatInt(int64(line), 10) + "\n"
 		}
 	}
 	return result
