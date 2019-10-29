@@ -43,7 +43,7 @@ func (this *StackClass) GetStack(opts Option) string {
 				skipCounter++
 				continue
 			}
-			result += file + ` --- ` + name + ` --- ` + strconv.FormatInt(int64(line), 10) + "\n"
+			result += file + ` ` + strconv.FormatInt(int64(line), 10) + "\n"
 			countCounter++
 			if opts.Count != 0 && countCounter >= opts.Count {
 				break
